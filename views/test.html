@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block main %}
+
+<body onmousemove="qqq()">
+    <div onmousemove="qqq()" style="padding-left: 500px;">
+        <img id="hb" src='/static/img/245.jpg' style='height:400px;'></img>
+        <div id="cai" style="background:black;position: absolute; z-index: 10; overflow: hidden; height:0px;width:0dx"><img src='/static/img/244.jpg'
+                style='height:400px;'></img></div>
+    </div>
+    <script>
+        qqq = () => {
+            var m = getMousePos();
+            ppp(m.x);
+        }
+
+        function getMousePos() {
+            var e = window.event;
+            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            var x = e.pageX || e.clientX + scrollX;
+            var y = e.pageY || e.clientY + scrollY;
+            return {
+                x: x,
+                y: y
+            }
+        }
+
+        ppp = d => fixtable("#cai", "hb", 400, d);
+
+
+        function fixtable(mask_id, table_id, c, d) {
+            var tableObj = document.getElementById(table_id);
+            var $maskObj = $(mask_id);
+            var mask_position = {
+                left: 0,
+                top: 0,
+                height: c,
+                width: d
+            };
+
+            while (tableObj) {
+                mask_position.left += tableObj.offsetLeft;
+                mask_position.top += tableObj.offsetTop;
+                tableObj = tableObj.offsetParent;
+            }
+            mask_position.width -= mask_position.left;
+            mask_position.width =  mask_position.width > $('#hb').width() ? $('#hb').width():mask_position.width;
+
+            $maskObj.css(mask_position);
+        }
+    </script>
+</body>
+
+{% endblock %}
