@@ -1,8 +1,8 @@
 /*
  * @Author: zxz 
  * @Date: 2018-11-05 19:52:08 
- * @Last Modified by:   zxz 
- * @Last Modified time: 2018-11-05 19:52:08 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-05 21:05:10
  * @note: 静态文件读取
  */
 const path = require('path');
@@ -21,7 +21,7 @@ function staticFiles(url, dir) {
             // 判断文件是否存在:
             if (await fs.exists(fp)) {
                 // 查找文件的mime:
-                ctx.response.type = mime.lookup(rpath);
+                ctx.response.type = mime.getType(rpath);  
                 // 读取文件内容并赋值给response.body:
                 ctx.response.body = await fs.readFile(fp);
             } else {
