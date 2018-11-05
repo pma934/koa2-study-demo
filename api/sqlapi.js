@@ -1,11 +1,20 @@
-const model = require('./model');
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 20:02:16 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-05 20:02:40
+ * @note: 注册和登陆时连接数据库的api
+ */
+
+const model = require('../api/model');
 
 let Client = model.client;
 let Msg = {
-    success: (msg) => {
+    success: (msg,id) => {
         return {
             type: "success",
-            msg: msg
+            msg: msg,
+            id:id
         }
     },
     faile: (msg,elem) => {
@@ -40,7 +49,7 @@ module.exports = {
         if (isUsed.length) {
             for(let client of isUsed){ //for in  键   for of  值
                if (client.password == t.password){
-                   return Msg.success("登录成功！");
+                   return Msg.success("登录成功！",client.id);
                }
             }
             return Msg.faile("账号密码错误！","password");

@@ -1,102 +1,72 @@
 {% extends "base.html" %} {% block main %}
 
 <body>
-    <div id="vm" style="margin: 0 30%;">
-        <h2 v-text="title" style="margin-left: 40%">登陆界面</h2>
-        <div>
-            <label style="display: inline-block; width:40%;margin-left: 30%">姓名：<input type="text" v-model="user_name"></label>
-            <samp v-text="msg.type=='name'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block;text-align: left;"></samp>
-        </div>
-        <div>
-            <label style="display: inline-block; width:40%; margin-left: 30%">密码：<input type="password" v-model="user_paw"></label>
-            <samp v-text="msg.type=='password'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
-        </div>
-        <button v-on:click="login" style="margin: 10px 0 0 40%;">登陆</button>
-        <button v-on:click="regist" style="margin: 10px 15% 0 5%;">注册</button>
-        <samp v-text="msg.type=='success'?msg.msg:''" style="color:green;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
+    <div id="head" style="display: block; height: 50px;background-color: rgb(86, 223, 223);">
+        <lable style="font-family:'华文彩云'; font-size: 1.5em; margin-left: 80%;">{{username}} <input name="logout" type="button"
+                value="退出" onclick="logout()"></lable>
     </div>
-
-    <form action="/myapi/loginSuccess" method="GET">
-        <button type="submit">submit</button>
-    </form>
-
-
+    <br>
+    <div onmousemove="pic_change()" style="padding-left: 500px;">
+        <img id="hb" src='/static/img/245.jpg' style='height:400px;'></img>
+        <div id="cai" style="background:black;position: absolute; z-index: 10; overflow: hidden; height:0px;width:0dx"><img
+                src='/static/img/244.jpg' style='height:400px;'></img>
+        </div>
+    </div>
     <script>
-        var vm = new Vue({
-            el: '#vm',
-            data: {
-                title: '欢迎光临',
-                user_name: '',
-                user_paw: '',
-                msg: new Array(),
-            },
-            created: function () {
-                console.log('初始化的回调函数')
-            },
-            methods: {
-                login: function () { //登陆
-                    let that = this;
-                    $.ajax({
-                        url: "/myapi/login",
-                        type: "post",
-                        data: {
-                            name: that.$data.user_name,
-                            password: that.$data.user_paw,
-                        },
-                        success: function (x) {
-                            console.log(x);
-                            console.log(x.type + ":" + x.msg);
-                            that.$data.msg = x;
-                        },
-                        error: function (e) {
-                            console.log("登陆error");
-                            console.log(e);
-                        },
-                    })
-                },
-
-                regist: function () { //注册
-                    let that = this;
-                    let reg1 = /^[\d\w\u4e00-\u9fa5,\.;\:"'?!\-]{2,7}$/;
-                    let reg2 = /^[0-9a-zA-Z\_]{6,18}$/;
-                    var r1 = that.$data.user_name.match(reg1);
-                    var r2 = that.$data.user_paw.match(reg2);
-                    if (r1 == null) {
-                        that.$data.msg = {
-                            type: 'name',
-                            msg: "昵称应该为2到7位的合法字符！"
-                        };
-                    } else if (r2 == null) {
-                        that.$data.msg = {
-                            type: 'password',
-                            msg: "密码应该为6到18位的合法字符！"
-                        };
-                    } else {
-                        $.ajax({
-                            url: "/myapi/regist",
-                            type: "post",
-                            data: {
-                                name: that.$data.user_name,
-                                password: that.$data.user_paw,
-                            },
-                            success: function (x) {
-                                console.log(x.type + ":" + x.msg);
-                                that.$data.msg = x;
-
-                            },
-                            error: function (e) {
-                                console.log("注册error");
-                                console.log(e);
-                            },
-                        })
+        function logout() {
+            $.ajax({
+                url: "/UserControllers/logout",
+                type: "get",
+                success: function (x) {
+                    if (x) {
+                        location.href = "/";
                     }
                 },
-            }
-        });
+                error: function (e) {
+                    console.log("退出error");
+                    console.log(e);
+                },
+            })
+        }
 
-        function url_ajax(x) {
-            console.log(x);
-            $.get(x);
+        pic_change = () => {
+            var m = getMousePos();
+            width_change(m.x);
+        }
+
+        function getMousePos() {
+            var e = window.event;
+            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            var x = e.pageX || e.clientX + scrollX;
+            var y = e.pageY || e.clientY + scrollY;
+            return {
+                x: x,
+                y: y
+            }
+        }
+
+        width_change = width => fixtable("#cai", "hb", 400, width);
+
+        function fixtable(mask_id, table_id, height, width) {
+            var tableObj = document.getElementById(table_id);
+            var $maskObj = $(mask_id);
+            var mask_position = {
+                left: 0,
+                top: 0,
+                height: height,
+                width: width
+            };
+
+            while (tableObj) {
+                mask_position.left += tableObj.offsetLeft;
+                mask_position.top += tableObj.offsetTop;
+                tableObj = tableObj.offsetParent;
+            }
+            mask_position.width -= mask_position.left;
+            mask_position.width = mask_position.width > $('#hb').width() ? $('#hb').width() : mask_position.width;
+
+            $maskObj.css(mask_position);
         }
     </script>
 </body>

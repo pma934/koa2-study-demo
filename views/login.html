@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block main %}
+
+<body>
+    <form id="vm" style="margin: 0 30%;" v-on:submit.prevent>
+        <h2 v-text="title" style="margin-left: 40%">登陆界面</h2>
+        <div>
+            <label style="display: inline-block; width:40%;margin-left: 30%">姓名：<input type="text" v-model="user_name"></label>
+            <samp v-text="msg.type=='name'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block;text-align: left;"></samp>
+        </div>
+        <div>
+            <label style="display: inline-block; width:40%; margin-left: 30%">密码：<input type="password" v-model="user_paw"></label>
+            <samp v-text="msg.type=='password'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
+        </div>
+        <button v-on:click="login" style="margin: 10px 0 0 40%;">登陆</button>
+        <button v-on:click="regist" style="margin: 10px 15% 0 5%;">注册</button>
+        <samp v-text="msg.type=='success'?msg.msg:''" style="color:green;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
+    </form>
+
+    <script>
+        var vm = new Vue({
+            el: '#vm',
+            data: {
+                title: '欢迎光临',
+                user_name: '',
+                user_paw: '',
+                msg: new Array(),
+            },
+            created: function() {
+                console.log('初始化的回调函数')
+            },
+            methods: {
+                login: function() { //登陆
+                    let that = this;
+                    $.ajax({
+                        url: "/UserControllers/login",
+                        type: "post",
+                        data: {
+                            name: that.$data.user_name,
+                            password: that.$data.user_paw,
+                        },
+                        success: function(x) {
+                            console.log(x);
+                            console.log(x.type + ":" + x.msg);
+                            that.$data.msg = x;
+                            if (x.type === 'success') {
+                                window.location.href = "/" //相当于刷新了页面
+                            }
+                        },
+                        error: function(e) {
+                            console.log("登陆error");
+                            console.log(e);
+                        },
+                    })
+                },
+
+                regist: function() { //注册
+                    let that = this;
+                    let reg1 = /^[\d\w\u4e00-\u9fa5,\.;\:"'?!\-]{2,7}$/;
+                    let reg2 = /^[0-9a-zA-Z\_]{6,18}$/;
+                    var r1 = that.$data.user_name.match(reg1);
+                    var r2 = that.$data.user_paw.match(reg2);
+                    if (r1 == null) {
+                        that.$data.msg = {
+                            type: 'name',
+                            msg: "昵称应该为2到7位的合法字符！"
+                        };
+                    } else if (r2 == null) {
+                        that.$data.msg = {
+                            type: 'password',
+                            msg: "密码应该为6到18位的合法字符！"
+                        };
+                    } else {
+                        $.ajax({
+                            url: "/UserControllers/regist",
+                            type: "post",
+                            data: {
+                                name: that.$data.user_name,
+                                password: that.$data.user_paw,
+                            },
+                            success: function(x) {
+                                console.log(x.type + ":" + x.msg);
+                                that.$data.msg = x;
+
+                            },
+                            error: function(e) {
+                                console.log("注册error");
+                                console.log(e);
+                            },
+                        })
+                    }
+                },
+            }
+        });
+    </script>
+</body>
+
+{% endblock %}

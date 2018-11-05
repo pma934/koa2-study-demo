@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../api/db');
 
 module.exports = db.defineModel('client', {
     name: {

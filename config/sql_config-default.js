@@ -1,4 +1,11 @@
-//MySQL配置文件
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 20:04:21 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-05 20:07:33
+ * @note: 默认的MySQL配置文件，process.env.NODE_ENV === 'production'时
+ */
+
 var config = {
     database: 'test', // 使用哪个数据库
     username: 'root', // 用户名

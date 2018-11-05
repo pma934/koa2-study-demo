@@ -1,8 +1,16 @@
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 19:49:41 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-05 19:56:16
+ * @note: 数据库基模型
+ */
+
 const Sequelize = require('sequelize');
 
 const uuid = require('node-uuid');
 
-const config = require('./sql_config/config');
+const config = require('../config/sql_config');
 
 console.log('init sequelize...');
 

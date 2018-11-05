@@ -1,15 +1,36 @@
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 20:08:20 
+ * @Last Modified by:   zxz 
+ * @Last Modified time: 2018-11-05 20:08:20 
+ * @main: 主程序
+ */
+
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
-const controller = require('./controller');
-const staticFiles = require('./static-files');
-const templating = require('./templating');
+const controller = require('./middleware/controller');
+const staticFiles = require('./middleware/static-files');
+const templating = require('./middleware/templating');
+const session = require('koa-session-minimal');
+const MysqlStore = require('koa-mysql-session');
+const sql_config = require('./config/sql_config.js');//数据库配置信息
 
 const app = new Koa();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-console.log(isProduction);
+const sessionMysqlConfig= {
+  user: sql_config.username,
+  password: sql_config.password,
+  database: sql_config.database,
+  host: sql_config.host,
+}
 
+// 配置session中间件
+app.use(session({
+  key: 'Dog cards',
+  store: new MysqlStore(sessionMysqlConfig)
+}))
 
 //第二个middleware处理静态文件：
 if (! isProduction) {

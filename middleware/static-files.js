@@ -1,3 +1,10 @@
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 19:52:08 
+ * @Last Modified by:   zxz 
+ * @Last Modified time: 2018-11-05 19:52:08 
+ * @note: 静态文件读取
+ */
 const path = require('path');
 const mime = require('mime');
 const fs = require('mz/fs');

@@ -1,3 +1,11 @@
+/*
+ * @Author: zxz 
+ * @Date: 2018-11-05 19:47:52 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-05 19:50:46
+ * @note: URL映射
+ */
+
 const fs = require('fs');
 // add url-route in /controllers:
 
@@ -27,11 +35,11 @@ function addMapping(router, mapping) {
 
 
 function addControllers(router, dir) {
-    fs.readdirSync(__dirname + '/' + dir).filter((f) => {
+    fs.readdirSync(__dirname + '/../' + dir).filter((f) => {
         return f.endsWith('.js');
     }).forEach((f) => {
         console.log(`process controller: ${f}...`);
-        let mapping = require(__dirname + '/' + dir + '/' + f);
+        let mapping = require(__dirname + '/../' + dir + '/' + f);
         console.log(mapping);
         addMapping(router, mapping);
     });
@@ -40,7 +48,7 @@ function addControllers(router, dir) {
 module.exports = function (dir) {
     let
         controllers_dir = dir || 'controllers', // 如果不传参数，扫描目录默认为'controllers'
-        router = require('koa-router')();
+        router = require('koa-router')();  //为了处理URL，我们需要引入koa-router这个middleware，让它负责处理URL映射。
     addControllers(router, controllers_dir);
     return router.routes();
 };
