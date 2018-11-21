@@ -1,20 +1,20 @@
 {% extends "base.html" %} {% block main %}
 
 <body>
-    <form id="vm" style="margin: 0 30%;" v-on:submit.prevent>
+    <div id="vm" style="margin: 0 30%;" >
         <h2 v-text="title" style="margin-left: 40%">登陆界面</h2>
         <div>
-            <label style="display: inline-block; width:40%;margin-left: 30%">姓名：<input type="text" v-model="user_name"></label>
+            <label style="display: inline-block; width:40%;margin-left: 30%">姓名：<input type="text" v-model="user_name" v-on:keyup.enter='login()' autofocus></label>
             <samp v-text="msg.type=='name'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block;text-align: left;"></samp>
         </div>
         <div>
-            <label style="display: inline-block; width:40%; margin-left: 30%">密码：<input type="password" v-model="user_paw"></label>
+            <label style="display: inline-block; width:40%; margin-left: 30%">密码：<input type="password" v-model="user_paw" v-on:keyup.enter='login()'></label>
             <samp v-text="msg.type=='password'?msg.msg:''" style="color:red;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
         </div>
-        <button v-on:click="login" style="margin: 10px 0 0 40%;">登陆</button>
-        <button v-on:click="regist" style="margin: 10px 15% 0 5%;">注册</button>
+        <button v-on:click="login()" style="margin: 10px 0 0 40%;">登陆</button>
+        <button v-on:click="regist()" style="margin: 10px 15% 0 5%;">注册</button>
         <samp v-text="msg.type=='success'?msg.msg:''" style="color:green;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
-    </form>
+    </div>
 
     <script>
         var vm = new Vue({

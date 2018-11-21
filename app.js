@@ -1,10 +1,11 @@
 /*
  * @Author: zxz 
  * @Date: 2018-11-05 20:08:20 
- * @Last Modified by:   zxz 
- * @Last Modified time: 2018-11-05 20:08:20 
+ * @Last Modified by: zxz
+ * @Last Modified time: 2018-11-14 17:25:15
  * @main: 主程序
  */
+process.env.NODE_ENV = !process.env.NODE_ENV?'test':process.env.NODE_ENV;
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
@@ -13,11 +14,13 @@ const staticFiles = require('./middleware/static-files');
 const templating = require('./middleware/templating');
 const session = require('koa-session-minimal');
 const MysqlStore = require('koa-mysql-session');
-const sql_config = require('./config/sql_config.js');//数据库配置信息
+const sql_config = require('./config/sql_config');//数据库配置信息
 
 const app = new Koa();
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+console.log(process.env.NODE_ENV);
 
 const sessionMysqlConfig= {
   user: sql_config.username,
