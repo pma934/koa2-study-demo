@@ -1,5 +1,4 @@
 {% extends "base.html" %} {% block main %}
-
 <body>
     <div id="vm" style="margin: 0 30%;" >
         <h2 v-text="title" style="margin-left: 40%">登陆界面</h2>
@@ -15,7 +14,7 @@
         <button v-on:click="regist()" style="margin: 10px 15% 0 5%;">注册</button>
         <samp v-text="msg.type=='success'?msg.msg:''" style="color:green;font-size: 1px; width:25%; display: inline-block; text-align: left;"></samp>
     </div>
-
+    
     <script>
         var vm = new Vue({
             el: '#vm',
