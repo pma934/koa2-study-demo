@@ -42,7 +42,7 @@
                             console.log(x.type + ":" + x.msg);
                             that.$data.msg = x;
                             if (x.type === 'success') {
-                                window.location.href = "/" //相当于刷新了页面
+                                window.location.reload() //相当于刷新了页面
                             }
                         },
                         error: function(e) {
